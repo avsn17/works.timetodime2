@@ -407,8 +407,7 @@ class PomodoroTimer:
         print('★' * 15)
         curr_mood = getattr(self, 'mood', 'Hype')
         curr_int = getattr(self, 'remind_interval', '10')
-        print(f'
-🎶 Music: {state}')')
+        
         print(f'
 🎶 Music: {state}')
         print(f'
@@ -475,6 +474,7 @@ class PomodoroTimer:
                         self.paused = not self.paused
                     elif key.lower() == 'a':
                         self.open_settings()
+                    
                     elif key.lower() == 'm':
                         self.music_playing = not getattr(self, 'music_playing', False)
                         state = '▶️ PLAYING' if self.music_playing else '⏸️ PAUSED'
