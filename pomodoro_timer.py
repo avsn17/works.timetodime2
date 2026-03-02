@@ -95,6 +95,25 @@ COLORS = {
 }
 
 class PomodoroTimer:
+
+    def send_desktop_notification(self, title, message):
+        import subprocess, sys
+        if sys.platform == 'darwin':  # macOS
+            subprocess.run(['osascript', '-e', f'display notification "{message}" with title "{title}"'])
+        else:  # Linux / Codespaces
+            subprocess.run(['notify-send', '-t', '5000', title, message])
+
+    def trigger_wellness_check(self):
+        msg = '💧 Drink water + 🧘 Stretch and Bend! Poyo!'
+        self.send_desktop_notification('KIRBY WELLNESS ALERT', msg)
+
+    def update_widget(self):
+        mins, secs = divmod(int(self.elapsed), 60)
+        status = 'PAUSED' if self.paused else 'FOCUS'
+        widget_data = f' <( " )> {status} | {mins:02d}:{secs:02d} | Goal: {self.distance_goal}m '
+        with open('/tmp/pomodoro_widget.txt', 'w') as f:
+            f.write(widget_data)
+
     def __init__(self):
         self.distance_goal = 0  # Meter;
         self.time_goal = 0  # min;
@@ -285,6 +304,7 @@ class PomodoroTimer:
                 time.sleep(0.1)
                 self.elapsed += 0.1
                 self.star_offset = (self.star_offset + 1) % 100
+                self.update_widget()
                 
                 # Auto-save progress every 30 seconds
                 if int(self.elapsed) % 30 == 0 and self.elapsed > 0:
