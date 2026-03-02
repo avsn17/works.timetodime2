@@ -399,6 +399,7 @@ class PomodoroTimer:
     
     
     
+    
     def open_settings(self):
         import termios, sys
         # Reset terminal so input() works
@@ -428,7 +429,6 @@ Select: ')
                 self.session_count = 0
                 print('🔄 Session count reset.')
         finally:
-            # Mode will be reset by the caller (run loop)
             pass
 
 
@@ -481,6 +481,7 @@ Select: ')
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.open_settings()
                         tty.setcbreak(sys.stdin.fileno())
+                    
                     elif key.lower() == 'm':
                         self.music_playing = not getattr(self, 'music_playing', False)
                         state = '▶️ PLAYING' if self.music_playing else '⏸️ PAUSED'
