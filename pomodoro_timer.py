@@ -114,37 +114,23 @@ class PomodoroTimer:
 
     
     
+    
+    
     def update_widget(self):
         try:
-            # Calculate Progress (0.0 to 1.0)
             progress = min(1.0, self.elapsed / self.time_goal) if self.time_goal > 0 else 0
             width = 15
             pos = int(width * progress)
-            
-            # Kirby Icon changes based on progress
-            if progress >= 1.0:
-                kirby = '<( ^.^ )>✨' # Success!
-            elif self.paused:
-                kirby = '<( -.- )>'    # Sleeping
-            elif progress > 0.5:
-                kirby = '<( "> )>'    # Focused / Determined
-            else:
-                kirby = '<( o.o )>'    # Starting journey
-            
-            # Build the Path: Kirby travels toward the Warp Star
+            kirby = '<( ^.^ )>✨' if progress >= 1.0 else ('<( -.- )>' if self.paused else '<( o.o )>')
             path_str = '·' * pos + kirby + '·' * (width - pos) + '🌟'
-            
-            # Mood Indicator
             mood = '💖' if getattr(self, 'mood', 'Hype') == 'Hype' else '🍵'
             mins, secs = divmod(int(self.elapsed), 60)
-            
-            # Final Widget String
             widget_data = f' {mood} {mins:02d}:{secs:02d} | {path_str} | {int(self.distance_goal)}m '
-            
             with open('/tmp/pomodoro_widget.txt', 'w') as f:
                 f.write(widget_data)
-        except Exception:
-            pass
+        except: pass
+
+
 
 
 
