@@ -408,8 +408,7 @@ class PomodoroTimer:
         try:
             # Switch to 'cooked' mode so input() works
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-            print('
-' + '★' * 15)
+            print('\n' + '★' * 15)
             print('🛠️ KIRBY CONFIG [A]')
             print('★' * 15)
             curr_mood = getattr(self, 'mood', 'Hype')
@@ -419,8 +418,7 @@ class PomodoroTimer:
             print(f'[3] Reset Session Count')
             print(f'[4] Exit Settings')
             
-            choice = input('
-Select: ')
+            choice = input('\nSelect: ')
             if choice == '1':
                 self.remind_interval = input('Enter minutes: ')
                 print(f'<( " )> Interval updated to {self.remind_interval}m!')
@@ -484,6 +482,7 @@ Select: ')
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.open_settings()
                         tty.setcbreak(sys.stdin.fileno())
+                    
                     
                     
                     elif key.lower() == 'm':
