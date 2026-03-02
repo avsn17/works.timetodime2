@@ -273,7 +273,7 @@ class PomodoroTimer:
             
             print(''.join(line))
         
-        controls = "[Space] Pause | [N] New | [S] Stats | [A] Kirby Config | [Q] Quit"
+        controls = "[Space] Pause | [N] New | [S] Stats | [A] Kirby Config | [C] Chat | [Q] Quit"
         print(controls[:cols] + COLORS['reset'])
         
         sys.stdout.flush()
@@ -478,17 +478,23 @@ class PomodoroTimer:
                     
                     
                     
+                    
                     if key == ' ':
                         self.paused = not self.paused
                     elif key.lower() == 'a':
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.open_settings()
                         tty.setcbreak(sys.stdin.fileno())
+                    elif key.lower() == 'c':
+                        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+                        self.chat()
+                        tty.setcbreak(sys.stdin.fileno())
                     elif key.lower() == 's':
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.show_stats()
                         tty.setcbreak(sys.stdin.fileno())
                     elif key.lower() == 'n':
+
 
 
                         distance_covered = (self.elapsed / 60) * 10
