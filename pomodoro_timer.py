@@ -400,9 +400,9 @@ class PomodoroTimer:
     
     
     
+    
     def open_settings(self):
-        print('
-' + '★' * 15)
+        print('\n' + '★' * 15)
         print('🛠️ KIRBY CONFIG [A]')
         print('★' * 15)
         curr_mood = getattr(self, 'mood', 'Hype')
@@ -412,8 +412,7 @@ class PomodoroTimer:
         print(f'[3] Reset Session Count')
         print(f'[4] Exit Settings')
         
-        choice = input('
-Select: ')
+        choice = input('\nSelect: ')
         if choice == '1':
             self.remind_interval = input('Enter minutes: ')
             print(f'<( " )> Interval updated to {self.remind_interval}m!')
@@ -424,7 +423,8 @@ Select: ')
             self.session_count = 0
             print('🔄 Session count reset.')
 
-def run(self):
+
+    def run(self):
         """Main application loop"""
         self.clear_screen()
         print(f"{COLORS['solar']}🌟 Welcome to Cosmic Pomodoro Timer 🌟{COLORS['reset']}\n")
@@ -513,4 +513,4 @@ if __name__ == "__main__":
         app = PomodoroTimer()
         app.run()
     except KeyboardInterrupt:
-        print(f"\n\n{COLORS['cosmic']}👋 Goodbye! May your path be guided by wisdom.{COLORS['reset']}")
+        print(f"\n\n{COLORS['cosmic']}👋 Goodbye! May your path be guided by wisdom.{COLORS['reset']}");
