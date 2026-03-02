@@ -39,13 +39,13 @@
 ---
 
 ## 📦 Quick Start
-\`\`\`bash
+
 # Terminal
-chmod +x pomodoro.py && ./pomodoro.py
+**poyo**
 
 # Web
 open pomodoro_web.html
-\`\`\`
+
 
 🌟 **May your productivity journey be guided by wisdom, timetodime2!** 🌟
 
