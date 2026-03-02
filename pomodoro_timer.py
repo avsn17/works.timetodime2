@@ -478,6 +478,13 @@ class PomodoroTimer:
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.chat()
                         tty.setcbreak(sys.stdin.fileno())
+                    
+                    elif key.lower() == 'm':
+                        print('
+🎶 Triggering Legendary Playlist...')
+                        # We send a signal to the web app via a status change
+                        self.elapsed = self.time_goal # Forces the 'end of session' trigger for testing
+
                     elif key.lower() == 'a':
                         self.open_settings()
                     elif key.lower() == 's':
