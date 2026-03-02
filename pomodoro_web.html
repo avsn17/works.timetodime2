@@ -266,6 +266,18 @@
             }
         }
 
+        
+        let partyInterval;
+        function startPartyStars() {
+            partyInterval = setInterval(() => {
+                const colors = ['#ffafcc', '#fb6f92', '#ff00ff', '#ffd700', '#00ffff'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = randomColor;
+                stars.forEach(s => { s.v *= 1.5; s.s *= 1.2; });
+            }, 500);
+        }
+
         // Timer Logic
         let timeLeft = 1500, timerId = null;
         function updateUI() {
@@ -285,7 +297,7 @@
                     clearInterval(timerId); 
                     
                     document.getElementById('audioPlayer').play(); 
-                    document.getElementById('kirbySprite').classList.add('dancing'); launchConfetti();
+                    document.getElementById('kirbySprite').classList.add('dancing'); launchConfetti(); startPartyStars();
                     document.getElementById('kirbySprite').innerText = '<( ^.^ )>';
  
                     document.getElementById('kirbySprite').innerText = "<( ^.^ )>";
