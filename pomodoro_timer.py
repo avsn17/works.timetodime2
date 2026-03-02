@@ -476,27 +476,19 @@ class PomodoroTimer:
                     
                     
                     
+                    
                     if key == ' ':
                         self.paused = not self.paused
                     elif key.lower() == 'a':
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.open_settings()
                         tty.setcbreak(sys.stdin.fileno())
-                    
-                    
-                    
-                    elif key.lower() == 'm':
-                        self.music_playing = not getattr(self, 'music_playing', False)
-                        state = '▶️ PLAYING' if self.music_playing else '⏸️ PAUSED'
-                        print(f'\n🎶 Music: {state}')
-                        with open('music_signal.txt', 'w') as f_sig:
-                            f_sig.write('toggle' if self.music_playing else 'pause')
                     elif key.lower() == 's':
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.show_stats()
                         tty.setcbreak(sys.stdin.fileno())
-                    
                     elif key.lower() == 'n':
+
                         distance_covered = (self.elapsed / 60) * 10
                         self.add_session(self.user_name, distance_covered, int(self.elapsed), completed=False)
                         self.running = False
@@ -523,4 +515,4 @@ if __name__ == "__main__":
         app.run()
     except KeyboardInterrupt:
         print(f"\n\n{COLORS['cosmic']}👋 Goodbye! May your path be guided by wisdom.{COLORS['reset']}");
-        print(f'\n🎶 Music: {state}') # This is the "Unterminated String" causing the crash
+        print(f'\n🎶 Music: {state}') # type: ignore # This is the "Unterminated String" causing the crash
