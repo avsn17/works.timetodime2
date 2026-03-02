@@ -464,37 +464,22 @@ class PomodoroTimer:
                 if select.select([sys.stdin], [], [], 0.1)[0]:
                     key = sys.stdin.read(1)
                     
+                    
                     if key == ' ':
                         self.paused = not self.paused
-                    elif key.lower() == 'b':
-                        # Just return to timer view
-                        pass
-                    elif key.lower() == 'q':
-                        distance_covered = (self.elapsed / 60) * METERS_PER_MINUTE
-                        self.add_session(self.user_name, distance_covered, int(self.elapsed), completed=False)
-                        self.running = False
-                        break
-                    elif key.lower() == 'c':
-                        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-                        self.chat()
-                        tty.setcbreak(sys.stdin.fileno())
-                    
+                    elif key.lower() == 'a':
+                        self.open_settings()
                     elif key.lower() == 'm':
                         self.music_playing = not getattr(self, 'music_playing', False)
                         state = '▶️ PLAYING' if self.music_playing else '⏸️ PAUSED'
-                        print(f'\n🎶 Music: {state}')
-                        with open('music_signal.txt', 'w') as sf: sf.write('toggle' if self.music_playing else 'pause')
-                    elif key.lower() == 'a':
-                        self.open_settings()
+                        print(f'
+🎶 Music: {state}')
+                        with open('music_signal.txt', 'w') as f_sig:
+                            f_sig.write('toggle' if self.music_playing else 'pause')
                     elif key.lower() == 's':
-                        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.show_stats()
-                        tty.setcbreak(sys.stdin.fileno())
-                    elif key.lower() == 'o':
-                        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-                        self.choose_color()
-                        tty.setcbreak(sys.stdin.fileno())
                     elif key.lower() == 'n':
+
                         distance_covered = (self.elapsed / 60) * METERS_PER_MINUTE
                         self.add_session(self.user_name, distance_covered, int(self.elapsed), completed=False)
                         self.running = False
