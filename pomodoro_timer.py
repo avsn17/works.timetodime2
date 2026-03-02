@@ -12,7 +12,7 @@ import random
 import json
 from datetime import datetime
 from pathlib import Path
-# from tkinter.tix import Meter
+# # from tkinter.tix import Meter
 
 # Configuration
 DATA_FILE = Path.home() / '.pomodoro_stats.json'
@@ -101,7 +101,7 @@ class PomodoroTimer:
         self.running = False
         self.paused = False
         self.chat_messages = []
-        self.user_name = ""
+        self.user_name = "Cosmic Kirbs"
         self.stats = self.load_stats()
         self.star_offset = 0
         self.bg_color = 'deep_space'
@@ -163,7 +163,7 @@ class PomodoroTimer:
             # Random category
             category = random.choice(list(QUOTES.keys()))
         
-        return random.choice(QUOTES[category])
+        return random.choice(QUOTES.get(category, QUOTES['wisdom']))
     
     def clear_screen(self):
         """Clear terminal screen"""
@@ -402,9 +402,9 @@ class PomodoroTimer:
         print(f"{COLORS['solar']}🌟 Welcome to Cosmic Pomodoro Timer 🌟{COLORS['reset']}\n")
         
         if not self.user_name:
-            self.user_name = input("Enter your name: ").strip()
+            self.user_name = "Cosmic Kirbs"
             if not self.user_name:
-                self.user_name = "Guest"
+                self.user_name = "Cosmic Kirbs"
         
         print(f"\n{COLORS['cosmic']}Welcome, {self.user_name}!{COLORS['reset']}")
         print(f"\n✨ {random.choice(QUOTES['iro'])}\n")
