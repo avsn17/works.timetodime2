@@ -96,6 +96,11 @@ COLORS = {
 
 class PomodoroTimer:
 
+    def clear_screen(self):
+        import os
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+
     def send_desktop_notification(self, title, message):
         import subprocess, sys
         if sys.platform == 'darwin':  # macOS
