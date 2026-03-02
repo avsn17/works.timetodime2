@@ -478,6 +478,8 @@ class PomodoroTimer:
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.chat()
                         tty.setcbreak(sys.stdin.fileno())
+                    elif key.lower() == 'a':
+                        self.open_settings()
                     elif key.lower() == 's':
                         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
                         self.show_stats()
