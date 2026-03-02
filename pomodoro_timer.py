@@ -314,9 +314,9 @@ class PomodoroTimer:
         wisdom = random.choice(QUOTES[random.choice(list(QUOTES.keys()))])
         print(f"\n✨ Wisdom: {wisdom}")
         
-        print("\nPress N for new timer, S for stats, Q to quit")
+        print("\nPress [N] for New Timer, [S] for Stats, [Q] to Quit")
         
-        os.system(f'osascript -e \'display notification "{advice}" with title "Goal Complete! Take a break!"\'')
+        print("🚀 Mission Status Updated!")
     
     def show_stats(self):
         """Display statistics comparison"""
