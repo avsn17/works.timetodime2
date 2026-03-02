@@ -34,12 +34,14 @@ class CosmicTimer:
         self.paused = False
         self.in_chat = False
         self.stats = self.load_stats()
+        self.old_settings = termios.tcgetattr(sys.stdin)
 
     def load_stats(self):
         if STATS_PATH.exists():
             try:
                 with open(STATS_PATH, 'r') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    return data if isinstance(data, dict) else {}
             except: return {}
         return {}
 
@@ -63,62 +65,49 @@ class CosmicTimer:
             with open(SIGNAL_FILE, 'w') as f:
                 f.write('PLAY_NEXT')
         except Exception as e:
-            print(f"Signal Error: {e}")
+            pass
 
     def clear(self):
-        # ANSI escape to clear screen and move cursor to home (reduces flicker)
-        print("\033[H\033[J", end="")
+        sys.stdout.write("\033[H\033[2J")
+        sys.stdout.flush()
 
     def chat_mode(self):
         self.in_chat = True
+        # Reset terminal to normal mode for input()
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.old_settings)
         self.clear()
-        print(f"{COLORS['p']}💬 CATALOG: iro, mj, lana, bronte, kant, heroic, lyrics, vibe (type 'back' to exit){COLORS['r']}")
+        print(f"{COLORS['p']}💬 CATALOG: iro, mj, lana, bronte, kant, heroic, lyrics, vibe{COLORS['r']}")
+        print(f"{COLORS['v']}(Type 'back' to return to your mission){COLORS['r']}\n")
         
-        # Temporary switch back to cooked mode for input
-        fd = sys.stdin.fileno()
-        old = termios.tcgetattr(fd)
-        try:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old) 
-            while True:
+        while True:
+            try:
                 cmd = input(f"{COLORS['c']}{USER_ID} > {COLORS['r']}").lower().strip()
                 if cmd == 'back': break
                 if cmd in QUOTES:
                     print(f"{COLORS['s']}Reflect: {random.choice(QUOTES[cmd])}{COLORS['r']}\n")
                 else:
                     print(f"{COLORS['v']}Unknown catalog entry.{COLORS['r']}")
-        finally:
-            tty.setcbreak(fd) # Return to raw for the timer
+            except EOFError: break
+
+        # Go back to raw mode for the timer loop
+        tty.setcbreak(sys.stdin.fileno())
         self.in_chat = False
 
     def run(self):
         self.clear()
         print(f"{COLORS['s']}{COLORS['bold']}🌟 COSMIC POMODORO IGNITION (2026) 🌟{COLORS['r']}")
+        
         try:
             val = input(f"\n{COLORS['g']}Enter distance goal in meters: {COLORS['r']}")
             self.dist_goal = int(val)
             self.time_goal_s = (self.dist_goal / METERS_PER_MINUTE) * 60
             self.running = True
-        except ValueError:
-            print("Invalid input. Mission aborted.")
+        except (ValueError, KeyboardInterrupt):
+            print("\nMission aborted.")
             return
 
-        def listen():
-            fd = sys.stdin.fileno()
-            old = termios.tcgetattr(fd)
-            try:
-                tty.setcbreak(fd)
-                while self.running:
-                    if select.select([sys.stdin], [], [], 0.1)[0]:
-                        k = sys.stdin.read(1).lower()
-                        if k == ' ': self.paused = not self.paused
-                        elif k == 'c': self.chat_mode()
-                        elif k == 'q': 
-                            self.running = False
-                            break
-            finally:
-                termios.tcsetattr(fd, termios.TCSADRAIN, old)
-
-        threading.Thread(target=listen, daemon=True).start()
+        # Start input listener thread
+        threading.Thread(target=self.input_listener, daemon=True).start()
 
         try:
             while self.running and self.elapsed < self.time_goal_s:
@@ -138,15 +127,33 @@ class CosmicTimer:
                     
                     print(f"\n{COLORS['v']}Controls: [Space] Pause | [C] Chat | [Q] Log & Autoplay{COLORS['r']}")
                 
-                if not self.paused:
+                if not self.paused and not self.in_chat:
                     self.elapsed += 1
                 time.sleep(1)
         except KeyboardInterrupt:
+            pass
+        finally:
             self.running = False
+            self.log_mission()
+            # Final terminal reset
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.old_settings)
 
-        self.log_mission()
         print(f"\n{COLORS['g']}✨ MISSION COMPLETE. Autoplay triggered for {USER_ID}.{COLORS['r']}")
         print(f"{COLORS['c']}Logged {round((self.elapsed/60)*METERS_PER_MINUTE, 2)}m to history.{COLORS['r']}\n")
+
+    def input_listener(self):
+        fd = sys.stdin.fileno()
+        tty.setcbreak(fd)
+        while self.running:
+            if not self.in_chat:
+                dr, dw, de = select.select([sys.stdin], [], [], 0.1)
+                if dr:
+                    k = sys.stdin.read(1).lower()
+                    if k == ' ': self.paused = not self.paused
+                    elif k == 'c': self.chat_mode()
+                    elif k == 'q': 
+                        self.running = False
+                        break
 
 if __name__ == "__main__":
     CosmicTimer().run()
