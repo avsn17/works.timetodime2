@@ -273,7 +273,7 @@ class PomodoroTimer:
             
             print(''.join(line))
         
-        controls = "SPACE=pause | B=back | Q=quit | C=chat | S=stats | O=color | N=new"
+        controls = "[Space] Pause | [N] New | [S] Stats | [A] Kirby Config | [Q] Quit"
         print(controls[:cols] + COLORS['reset'])
         
         sys.stdout.flush()
@@ -477,6 +477,7 @@ class PomodoroTimer:
                     
                     
                     
+                    
                     if key == ' ':
                         self.paused = not self.paused
                     elif key.lower() == 'a':
@@ -488,6 +489,7 @@ class PomodoroTimer:
                         self.show_stats()
                         tty.setcbreak(sys.stdin.fileno())
                     elif key.lower() == 'n':
+
 
                         distance_covered = (self.elapsed / 60) * 10
                         self.add_session(self.user_name, distance_covered, int(self.elapsed), completed=False)
