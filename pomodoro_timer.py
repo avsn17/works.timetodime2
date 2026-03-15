@@ -1,1 +1,1 @@
-# paste file contents
+#!/usr/bin/env python3
