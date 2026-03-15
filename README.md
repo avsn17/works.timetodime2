@@ -1,6 +1,6 @@
-# ⏱️ timetodime2
+# ✦ timetodime2
 
-> Cosmic focus timer by avsn17. Terminal-based Pomodoro with star-themed UI, Kirby widgets, Y2K mode, and galactic ranking.
+> Terminal Pomodoro suite by **avsn17**. Focus timer with Y2K mode, Kirby widget, music autoplay, galactic ranks, and cosmic boot system.
 
 ---
 
@@ -11,16 +11,19 @@ git clone https://github.com/avsn17/timetodime2
 cd timetodime2
 chmod +x install.sh && ./install.sh
 
-# Run the main timer
+# Main timer
 python3 pomodoro_timer.py
 
-# Or use the mission launcher
-chmod +x launch_mission.sh && ./launch_mission.sh
-
-# Install alias
+# Quick launcher alias
 echo "alias poyo='cd $(pwd) && python3 pomodoro_timer.py'" >> ~/.zshrc
 source ~/.zshrc
 poyo
+
+# Mission launcher
+chmod +x launch_mission.sh && ./launch_mission.sh
+
+# Auto boot (git sync + patch + launch)
+python3 cosmic_boot.py
 ```
 
 ---
@@ -30,19 +33,18 @@ poyo
 | File | Description |
 |------|-------------|
 | `pomodoro_timer.py` | ✦ Main stellar focus timer |
-| `pomodoro_timer2.py` | Alternative timer variant |
-| `pomodoro_y2k.py` | Y2K retro-themed timer |
+| `poyo.py` | Compact cosmic timer with progress bar + chat |
+| `pomodoro_y2k.py` | Y2K glitch aesthetic standalone timer |
 | `pomodoro_web.html` | Browser-based timer UI |
-| `kirby_widget.py` | Floating Kirby desktop widget (tkinter) |
+| `kirby_widget.py` | Terminal status monitor widget |
 | `kirby_dance.html` | Kirby dance animation page |
-| `cosmic_boot.py` | Cosmic boot sequence / splash |
-| `poyo.py` | Poyo launcher utility |
-| `music_watcher.py` | Watches `music_signal.txt` for autoplay |
-| `launch_mission.sh` | Shell launcher for the timer |
+| `cosmic_boot.py` | Auto git sync + feature repair + launcher |
+| `music_watcher.py` | Signal file watcher for music autoplay |
+| `launch_mission.sh` | Shell launcher |
 | `install.sh` | Setup script |
-| `history.log` | Session history log |
-| `session_history.json` | JSON session data |
-| `music_signal.txt` | Music autoplay signal file |
+| `session_history.json` | Session data log |
+| `music_signal.txt` | Music control signal file |
+| `history.log` | Raw session history |
 
 ---
 
@@ -51,17 +53,17 @@ poyo
 | Key | Action |
 |-----|--------|
 | `Space` | Pause / Resume |
-| `C` | Open Wisdom Chat |
-| `S` | Show Stats Leaderboard |
+| `C` | Wisdom Chat |
+| `S` | Stats Leaderboard |
 | `A` | Config / Settings |
 | `M` | Toggle Music Signal |
-| `O` | Change Background Color |
-| `N` | Save & Start New Session |
+| `O` | Change Color Theme |
+| `N` | Save & New Session |
 | `Q` | Save & Quit |
 
 ---
 
-## 📊 Stellar Ranking System
+## 📊 Stellar Rank System
 
 | Distance | Rank |
 |----------|------|
@@ -79,45 +81,57 @@ poyo
 
 ## 💬 Wisdom Chat Categories
 
-`wisdom` · `star` · `heroic` · `iro` · `bronte` · `kant` · `lyrics` · `vibe`
+`wisdom` · `star` · `heroic` · `iro` · `bronte` · `kant` · `lyrics` · `vibe` · `mj` · `lana`
 
 ---
 
 ## 🎵 Music Autoplay
 
-On session completion, `music_signal.txt` is written with `PLAY_NEXT`.
-
 ```bash
-# Run the watcher in background
+# Start watcher in background
 python3 music_watcher.py &
+
+# Drop your music
+mkdir -p data && cp ~/music.mp3 data/focus_music.mp3
 ```
+
+Signal protocol written to `music_signal.txt`:
 
 | Signal | Action |
 |--------|--------|
-| `PLAY_NEXT` | Start playing |
+| `PLAY_NEXT` | Start playback |
 | `STOP` | Stop playback |
-| `PAUSE` | Pause playback |
+| `PAUSE` | Freeze playback |
 | `RESUME` | Resume playback |
+| `IDLE` | No action |
 
 ---
 
 ## 🖥️ Variants
 
-**Y2K Mode:**
+**Y2K Glitch Mode:**
 ```bash
 python3 pomodoro_y2k.py
 ```
 
+**Compact Timer (poyo):**
+```bash
+python3 poyo.py
+```
+
 **Web UI:**
 ```bash
-open pomodoro_web.html
-# or
 python3 -m http.server && open http://localhost:8000/pomodoro_web.html
 ```
 
-**Kirby Widget:**
+**Terminal Widget** (run in a separate terminal):
 ```bash
 python3 kirby_widget.py
+```
+
+**Auto Boot System:**
+```bash
+python3 cosmic_boot.py   # git pull + repair + launch
 ```
 
 ---
@@ -125,17 +139,16 @@ python3 kirby_widget.py
 ## 🛠️ Requirements
 
 - Python 3.10+
-- `tkinter` (for desktop widget — usually bundled)
-- `mpv` (optional, for local music): `sudo apt install mpv` / `brew install mpv`
+- `mpv` — local music: `sudo apt install mpv` / `brew install mpv`
+- `libnotify-bin` — Linux notifications: `sudo apt install libnotify-bin`
+- `tkinter` — bundled with most Python installs
 
 ---
 
 ## 🔗 Related
 
-- **[kirbs.pomodoro](https://github.com/avsn17/kirbs.pomodoro)** — full upgraded version with notifications, local music control, and Base44 web dashboard
+- **[kirbs.pomodoro](https://github.com/avsn17/kirbs.pomodoro)** — full upgrade: notifications, local music control, Base44 web dashboard
 
 ---
-
-## 👾 Navigator
 
 **avsn17** — *Ad astra. ✦*
